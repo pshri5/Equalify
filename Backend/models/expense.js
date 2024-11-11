@@ -13,9 +13,8 @@ const Expense = new Schema({
             share : Number
         }
     ],
-    groupId : ObjectId,
-    createdAt : Date,
-    updatedAt : Date
-})
+    groupId : ObjectId
+}, {timestamps : true}
+)
 
 export const expenseModel = mongoose.model("expense",Expense);
