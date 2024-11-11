@@ -7,3 +7,7 @@ const authRouter = Router();
 
 authRouter.post("/register",validator(registerSchema),register);
 authRouter.post("/login",validator(loginSchema),signin);
+
+module.exports = {
+    authRouter : authRouter
+}

@@ -1,4 +1,4 @@
-import {userModel} from "../models/user";
+const {userModel} =require("../models/user");
 const bcrypt = require("bcrypt");
 
 // Hash the user password
