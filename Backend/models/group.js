@@ -9,4 +9,6 @@ const Group = new Schema({
 }, {timestamps : true}
 )
 
-export const groupModel = mongoose.model("group",groupModel);
+const groupModel = mongoose.model("group",groupModel);
+
+module.exports = groupModel;

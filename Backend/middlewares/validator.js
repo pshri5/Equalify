@@ -1,4 +1,4 @@
-export const validator = (validationSchema) => {
+const validator = (validationSchema) => {
     return function (req,res,next){
         const result = validationSchema.safeParse(req.body);
         if(!result.success){
@@ -7,3 +7,5 @@ export const validator = (validationSchema) => {
         next();
     };
 }
+
+module.exports = validator;
