@@ -1,5 +1,7 @@
 const userModel =require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const JWT_USER_PASSWORD = process.env.JWT_USER_PASSWORD;
 
 // Hash the user password
 async function getHashPassword(password){
@@ -32,7 +34,6 @@ exports.register = async(req,res) => {
         return res.status(200).json({message:"User created!"});
 
     } catch(error){
-        console.log(error);
         return res.status(400).json({error:"Error creating user"});
     }
 }
@@ -48,6 +49,11 @@ exports.signin = async(req,res) => {
 
         if(!user){
             return res.status(400).json({error:"User is not registered"});
+        }
+
+        if(user.password===hashPassword){
+            const token = jwt.sign({email : user.email},JWT_USER_PASSWORD);
+            return res.status(200).json({error:""})
         }
 
 
