@@ -1,4 +1,4 @@
-const userModel =require("../models/user");
+const userModel =require("../models/user.model");
 const bcrypt = require("bcrypt");
 
 // Hash the user password
