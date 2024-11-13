@@ -26,7 +26,8 @@ exports.profileSchema = z.object({
     name : z.string()
         .min(3,"Atlest 3 characters are required for name")
         .optional(),
-    password : z.string()
+    password : z.string().optional(),
+    newPassword : z.string()
         .regex(passwordRegex,"Password doesn't match the criteria")
         .optional()
 })

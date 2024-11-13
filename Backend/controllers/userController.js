@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
-const userModel =require("../models/user.model");
+const User =require("../models/user.model");
 const { JWT_USER_PASSWORD } = require("../config/envConfig");
 
 // Hash the user password
@@ -16,7 +16,7 @@ exports.register = async(req,res) => {
         const {name,email,password} = req.body;
 
         // Check if user already exists
-        const user = await userModel.findOne({
+        const user = await User.findOne({
             email
         })
         if(user){
@@ -27,7 +27,7 @@ exports.register = async(req,res) => {
 
         // Hash the password and create the user
         const hashPassword = await getHashPassword(password);
-        await userModel.create({
+        await User.create({
             name,
             email,
             password : hashPassword
@@ -51,7 +51,7 @@ exports.login = async(req,res) => {
         const {email,password} = req.body;
 
         // Check if user exists
-        const user = await userModel.findOne({
+        const user = await User.findOne({
             email : email
         });
         if(!user){
@@ -87,7 +87,7 @@ exports.login = async(req,res) => {
 // Get Profile
 exports.getProfile = async (req,res) => {
     try{
-        const user = await userModel.findOne({
+        const user = await User.findOne({
             _id : req.id
         });
 
@@ -111,7 +111,7 @@ exports.getProfile = async (req,res) => {
 
 // Set Profile
 exports.setProfile = async (req,res) => {
-    const {name,password} = req.body;
+    const {name,password,newPassword} = req.body;
 
     try {
         const updateFields = {};
@@ -121,14 +121,24 @@ exports.setProfile = async (req,res) => {
         }
         // Check if password is provided in body
         if(password){
-            // Hash the password and create the user
-            const hashPassword = await getHashPassword(password);
+            // Get user details from DB based on id in token
+            const user = await User.findOne({_id : req.id});
+            // Verify password
+            const isValid = await bcrypt.compare(password,user.password);
+            if(!isValid){
+                return res.status(400).json({
+                    error:"Incorrect password!"
+                });
+            }
+            // Hash the new password
+            const hashPassword = await getHashPassword(newPassword);
             updateFields.password = hashPassword
         }
 
-        await userModel.updateOne(
+        console.log(updateFields);
+        await User.updateOne(
             {_id : req.id},
-            {$set : { updateFields }}
+            {$set : updateFields}
         )
         return res.status(200).json({
             message : "User updated!"
