@@ -11,11 +11,23 @@ At least one number
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{5,}$/;
 
 exports.registerSchema = z.object({
-    name: z.string().min(3,"Name should have atleast 3 characters"),
+    name: z.string().min(3,"Atlest 3 characters are required for name"),
     email: z.string().email("Invalid email address"),
-    password : z.string().regex(passwordRegex,"Password doesn't match the criteria")
+    password : z.string()
+        .regex(passwordRegex,"Password doesn't match the criteria")
 })
 
 exports.loginSchema = z.object({
-    email: z.string().email("Invalid email address")
+    email: z.string().email("Invalid email address"),
+    password : z.string()
+})
+
+exports.profileSchema = z.object({
+    name : z.string()
+        .min(3,"Atlest 3 characters are required for name")
+        .optional(),
+    password : z.string().optional(),
+    newPassword : z.string()
+        .regex(passwordRegex,"Password doesn't match the criteria")
+        .optional()
 })

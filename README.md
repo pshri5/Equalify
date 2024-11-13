@@ -28,7 +28,7 @@ cd Equalify
      b. Install the dependencies
    - `npm install`
      c. Run the server
-     `npm run server:dev`
+     `npm run server`
      d. Run the server in browser at
      `http://localhost:3000`
 
