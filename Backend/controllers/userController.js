@@ -89,7 +89,8 @@ exports.getProfile = async (req,res) => {
     try{
         const user = await User.findOne({
             _id : req.id
-        });
+        })
+        .select('-password -updatedAt -createdAt -__v');
 
         if(!user){
             return res.status(403).json({
@@ -97,10 +98,7 @@ exports.getProfile = async (req,res) => {
             });
         }
 
-        return res.status(200).json({
-            name : user.name,
-            email : user.email
-        });
+        return res.status(200).json(user);
 
     } catch(error) {
         return res.status(403).json({
