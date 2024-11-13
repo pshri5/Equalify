@@ -18,9 +18,15 @@ exports.registerSchema = z.object({
 })
 
 exports.loginSchema = z.object({
-    email: z.string().email("Invalid email address")
+    email: z.string().email("Invalid email address"),
+    password : z.string()
 })
 
 exports.profileSchema = z.object({
-    name : z.string().min(3,"Atlest 3 characters are required for name")
+    name : z.string()
+        .min(3,"Atlest 3 characters are required for name")
+        .optional(),
+    password : z.string()
+        .regex(passwordRegex,"Password doesn't match the criteria")
+        .optional()
 })

@@ -111,22 +111,32 @@ exports.getProfile = async (req,res) => {
 
 // Set Profile
 exports.setProfile = async (req,res) => {
-    const {name} = req.body;
+    const {name,password} = req.body;
+
     try {
+        const updateFields = {};
+        // Check if the name is provided in body
+        if(name){
+            updateFields.name = name;
+        }
+        // Check if password is provided in body
+        if(password){
+            // Hash the password and create the user
+            const hashPassword = await getHashPassword(password);
+            updateFields.password = hashPassword
+        }
+
         await userModel.updateOne(
             {_id : req.id},
-            {$set : {
-                name : name
-            }}
+            {$set : { updateFields }}
         )
         return res.status(200).json({
             message : "User updated!"
         })
     } catch(error) {
-
+        console.log(error);
+        return res.status(400).json({
+            message : "Error updating info"
+        })
     }
-
-    return res.status(200).json({
-        message : " Testing"
-    })
 }
