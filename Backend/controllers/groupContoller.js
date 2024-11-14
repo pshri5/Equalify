@@ -6,7 +6,7 @@ exports.createGroup = async (req,res)=>{
     const members = [req.id];
     try{
         // Create Group
-        await Group.create({
+        const group = await Group.create({
             name,
             members
         });
@@ -30,10 +30,10 @@ exports.listGroups = async (req,res) => {
         const groups = await Group.find({
             members :  id
         }).populate({
-            path : "members",
-            select : "-password -updatedAt -createdAt -__v"
-        })
-        .select('-updatedAt -createdAt -__v');
+            path : 'members',
+            select : "-password -createdAt -updatedAt -__v" // Given fields will not populate "-" indicates negation
+        }) // Populate the data of the object
+        .select('-createdAt -updatedAt -__v'); // Given fields will not populate "-" indicates negation
 
         return res.status(200).json({
             groups
@@ -53,9 +53,9 @@ exports.getGroup = async (req,res) => {
         const group = await Group.findById(groupId)
         .populate({
             path : 'members',
-            select : "-password -createdAt -updatedAt -__v"
-        })
-        .select('-createdAt -updatedAt -__v');
+            select : "-password -createdAt -updatedAt -__v" // Given fields will not populate "-" indicates negation
+        }) // Populate the data of the object
+        .select('-createdAt -updatedAt -__v'); // Given fields will not populate "-" indicates negation
     
         return res.status(200).json(group)
     } catch(error){
@@ -64,6 +64,7 @@ exports.getGroup = async (req,res) => {
     }
 }
 
+// Update name of group
 exports.updateGroup = async (req,res) => {
     const {groupId} = req.params;
     const {name} = req.body;
@@ -73,15 +74,17 @@ exports.updateGroup = async (req,res) => {
             groupId,
             {"$set":{
                 name
-            }}
+            }},
+            {new : true} // Will return updated document in response
         ).populate({
             path : 'members',
-            select : "-password -createdAt -updatedAt -__v"
-        })
-        .select('-createdAt -updatedAt -__v');
+            select : "-password -createdAt -updatedAt -__v" // Given fields will not populate "-" indicates negation
+        }) // Populate the data of the object
+        .select('-createdAt -updatedAt -__v'); // Given fields will not populate "-" indicates negation
 
         res.status(200).json({
-            message : "Group updated!"
+            message : "Group updated!",
+            group
         })
 
     }catch(error){
@@ -111,25 +114,49 @@ exports.deleteGroup = async (req,res) => {
     }
 }
 
-// Add members - Under Progress
+// Add members
 exports.addMember = async (req,res) => {
     const {groupId} = req.params;
-    const {userId} = req.body;
+    const {memberId} = req.body;
     try{
         const group = await Group.findByIdAndUpdate(
             groupId,
-            {$addToSet: {members:userId}} // Add only if user is not already present
+            {$addToSet: {members:memberId}},// Add only if user is not already present
+            {new : true} // Will return updated document in response
         ).populate({
             path : 'members',
-            select : "-password -createdAt -updatedAt -__v"
-        })
-        .select('-createdAt -updatedAt -__v');
-        ;
+            select : "-password -createdAt -updatedAt -__v" // Given fields will not populate "-" indicates negation
+        }) // Populate the data of the object
+        .select('-createdAt -updatedAt -__v'); // Given fields will not populate "-" indicates negation
+
         res.status(200).json(group);
     }catch(error){
         console.log(error);
         return res.status(400).json({
             error : "Error adding member"
         })
+    }
+}
+
+// Remove member from the group
+exports.deleteMember = async (req,res) => {
+    const {groupId} = req.params;
+    const {memberId} = req.body;
+
+    try{
+        const group = await  Group.findByIdAndUpdate(
+            groupId,
+            {$pull: {members : memberId}}, // Remove the provided memberId from members
+            {new : true} // Return latest data
+        ).populate({
+            path : 'members',
+            select : "-password -createdAt -updatedAt -__v" // Given fields will not populate "-" indicates negation
+        }) // Populate the data of the object
+        .select('-createdAt -updatedAt -__v'); // Given fields will not populate "-" indicates negation
+
+        return res.status(200).json(group);
+    } catch(error){
+        console.log(error);
+        return res.json({error : "Error removing the member"});
     }
 }
