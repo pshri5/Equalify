@@ -133,7 +133,6 @@ exports.setProfile = async (req,res) => {
             updateFields.password = hashPassword
         }
 
-        console.log(updateFields);
         await User.updateOne(
             {_id : req.id},
             {$set : updateFields}

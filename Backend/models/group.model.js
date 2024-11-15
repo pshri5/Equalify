@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const userModel = require('./user.model');
+const User = require('./user.model');
 const Schema = mongoose.Schema;
 
 
@@ -11,7 +11,13 @@ const groupSchema = new Schema({
     },
     members : [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: userModel,
+        ref: User,
+        // This will check if the provided id exists in User model
+        validate: {
+            validator : async function (value) {
+                return await User.exists({_id : value})
+            }
+        }
     }]
 }, {timestamps : true}
 )
