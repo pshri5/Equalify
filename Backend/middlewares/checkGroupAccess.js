@@ -2,7 +2,12 @@ const Group = require("../models/group.model");
 
 const checkGroupAccess = async (req,res,next) => {
     const id = req.id;
-    const {groupId} = req.params;
+    let {groupId} = req.params;
+    
+    if(!groupId){
+        groupId = req.body.groupId;
+    }
+
     try{
         const group = await Group.findById(groupId);
         
