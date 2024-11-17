@@ -7,13 +7,14 @@ require('dotenv').config(); // Load environment variables from .env file
 
 const {userRouter} = require("./routes/userRoute");
 const {groupRouter} = require("./routes/groupRoute");
+const {expenseRouter} = require("./routes/expenseRoute");
 const {MONGO_DB_URL,PORT} = require("./config/envConfig");
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/v1/users",userRouter);
 app.use("/api/v1/groups",groupRouter);
-//app.use("/api/v1/expenses",expenseRouter);
+app.use("/api/v1/expenses",expenseRouter);
 
 // Test Route
 app.get("/test", (req, res) => {
