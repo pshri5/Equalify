@@ -25,14 +25,15 @@ exports.createExpense = async (req,res) => {
     }
 }
 
-/**
- * Need to check if expenses with user as payee also need to be included
- */
+// Show the user all the expenses he is part of i.e. paid by or shared by
 exports.getExpenses = async(req,res) => {
     const id = req.id;
     try{
         const expenses = await Expense.find({
-            "sharedBy" : id
+            $or: [
+                {"sharedBy" : id},
+                {"payee" : id}
+            ]
         });
         return res.status(200).json(expenses)
     } catch(error){
@@ -44,11 +45,12 @@ exports.getExpenses = async(req,res) => {
 }
 
 // Get expense by expense id
-// There is no check to verify if user should have access to the expense
 exports.getExpense = async (req,res) => {
     const {expenseId} = req.params;
     try{
-        const expense = await Expense.findById(expenseId);
+        const expense = await Expense.findById(expenseId)
+            .populate('payees','name')
+            .populate('sharedBy','name');
         return res.status(200).json(expense);
     } catch(error){
         console.log(error);
@@ -67,7 +69,6 @@ exports.updateExpense = async (req,res) => {
     if(name){
         updateFields.name = name;
     }
-
     if(amount){
         updateFields.amount = amount
     }
@@ -103,4 +104,13 @@ exports.deleteExpense = async (req,res)=> {
             error : "Error deleting expense"
         })
     }
+}
+
+exports.addUsers = async (req,res) => {
+    const {payees} = req.body;
+    return res.json({message : "Adding users"});
+}
+
+exports.removeUsers = async(req,res) => {
+    return res.json("Remove users");
 }
