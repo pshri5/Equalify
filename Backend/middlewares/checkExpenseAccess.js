@@ -25,13 +25,13 @@ const checkExpenseAccess = async (req,res,next) => {
         }
 
         // Check if the payees required to be added in the expense are part of the group
-        const invalidPayee = payees ? payees.filter(payee=>{
-            return group.members.some(member => member._id.toString() != payee)
+        const invalidPayee = payees ? payees.filter(payee => {
+            return !group.members.some(member => member._id.toString() === payee)
         }) : [];
 
         // Check if the sharee required to be added in the expense are part of the group
-        const invalidSharee = sharedBy ? sharedBy.filter(sharee=>{
-            return group.members.some(member => member._id.toString() != sharee)
+        const invalidSharee = sharedBy ? sharedBy.filter(sharee => {
+            return !group.members.some(member => member._id.toString() === sharee)
         }) : [];
 
         if(invalidPayee.length || invalidSharee.length){

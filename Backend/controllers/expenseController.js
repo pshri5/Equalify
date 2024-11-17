@@ -107,10 +107,62 @@ exports.deleteExpense = async (req,res)=> {
 }
 
 exports.addUsers = async (req,res) => {
-    const {payees} = req.body;
+    const {expenseId} = req.params;
+    const {payees,sharedBy} = req.body;
+    try{
+        const expense = await Expense.findByIdAndUpdate(expenseId,
+            {
+                "$addToSet" : {
+                    payees : {
+                        "$each" : payees || [] // Add list of payees if not already present
+                    },
+                    sharedBy : {
+                        "$each" : sharedBy || [] // Add list of sharedBy if not already present
+                    }
+                }
+            },
+            {new : true}
+        )
+        .populate('payees','name')
+        .populate('sharedBy','name');
+        return res.json(expense);
+    } catch(error) {
+        console.log(error);
+        res.status(400).json({
+            error : "Error updating the expense"
+        })
+    }
+
     return res.json({message : "Adding users"});
 }
 
 exports.removeUsers = async(req,res) => {
-    return res.json("Remove users");
+    const {expenseId} = req.params;
+    const {payees,sharedBy} = req.body;
+
+    try {
+        const expense = await Expense.findByIdAndUpdate(
+            expenseId,
+            {
+                '$pull' : {
+                    payees : {
+                        '$in' : payees || [] // Remove the payees from the provided list
+                    },
+                    sharedBy : {
+                        '$in' : sharedBy || [] // Remove the sharedBy from the provided list
+                    }
+                }
+            },
+            {new : true}
+        )
+        .populate('payees','name')
+        .populate('sharedBy','name');
+
+        return res.json(expense);
+    } catch(error){
+        console.log(error);
+        return res.status(400).json({
+            error : "Error updating expense"
+        });
+    }
 }
