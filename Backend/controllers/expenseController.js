@@ -34,7 +34,10 @@ exports.getExpenses = async(req,res) => {
                 {"sharedBy" : id},
                 {"payee" : id}
             ]
-        });
+        })
+        .populate('payees','name')
+        .populate('sharedBy','name')
+        .select('-createdAt -updatedAt -__v');
         return res.status(200).json(expenses)
     } catch(error){
         console.log(error);
@@ -50,7 +53,8 @@ exports.getExpense = async (req,res) => {
     try{
         const expense = await Expense.findById(expenseId)
             .populate('payees','name')
-            .populate('sharedBy','name');
+            .populate('sharedBy','name')
+            .select('-createdAt -updatedAt -__v');
         return res.status(200).json(expense);
     } catch(error){
         console.log(error);
@@ -79,6 +83,10 @@ exports.updateExpense = async (req,res) => {
             {$set : updateFields},
             {new : true} // this will make sure that update response is returned
         )
+        .populate('payees','name')
+        .populate('sharedBy','name')
+        .select('-createdAt -updatedAt -__v');
+
         return res.status(200).json({
             expense
         })
@@ -124,7 +132,8 @@ exports.addUsers = async (req,res) => {
             {new : true}
         )
         .populate('payees','name')
-        .populate('sharedBy','name');
+        .populate('sharedBy','name')
+        .select('-createdAt -updatedAt -__v');
         return res.json(expense);
     } catch(error) {
         console.log(error);
@@ -156,7 +165,8 @@ exports.removeUsers = async(req,res) => {
             {new : true}
         )
         .populate('payees','name')
-        .populate('sharedBy','name');
+        .populate('sharedBy','name')
+        .select('-createdAt -updatedAt -__v');
 
         return res.json(expense);
     } catch(error){
