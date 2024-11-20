@@ -1,4 +1,5 @@
 const Group = require("../models/group.model");
+const Expense = require("../models/expense.model");
 
 // Create Group
 exports.createGroup = async (req,res)=>{
@@ -158,5 +159,50 @@ exports.deleteMember = async (req,res) => {
     } catch(error){
         console.log(error);
         return res.json({error : "Error removing the member"});
+    }
+}
+
+// Get group Expenses
+exports.getExpenses = async(req,res) => {
+    const {groupId} = req.params;
+    try{
+        const expenses = await Expense.find({
+            $and : [
+                {groupId : groupId},
+                {isSettled : false}
+            ]
+        });
+        return res.status(200).json({expenses});
+    } catch(error) {
+        console.error(error.message);
+        return res.json({error : "Error fetching expenses"});
+    }
+}
+
+// Settle all the expenses of the group
+exports.settleExpenses = async (req,res) => {
+    const {groupId} = req.params;
+    const {settle} = req.body;
+    if(!settle){
+        return res.status(403).json({
+            error : "Expense cannot be unsettled!"
+        })
+    }
+    try{
+        await Expense.updateMany({
+             $and : [
+                {groupId : groupId},
+                {isSettled : false}
+            ]
+            },
+            {isSettled : true},
+            {new : true}
+        )
+        return res.status(200).json({
+            message : "Expenses settled!"
+        });
+    } catch(error){
+        console.log(error.message);
+        return res.status(400).json("Error settling expenses");
     }
 }

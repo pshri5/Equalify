@@ -7,3 +7,7 @@ exports.createSchema = z.object({
 exports.memberSchema = z.object({
     memberId : z.string().min(24,"Member Id is not a valid object!")
 })
+
+exports.settleSchema = z.object({
+    settle : z.boolean()
+})

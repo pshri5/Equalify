@@ -10,6 +10,7 @@ exports.createExpense = async (req,res) => {
         await Expense.create({
             name,
             amount,
+            isSettled : false,
             payees,
             sharedBy,
             groupId
@@ -30,9 +31,14 @@ exports.getExpenses = async(req,res) => {
     const id = req.id;
     try{
         const expenses = await Expense.find({
-            $or: [
-                {"sharedBy" : id},
-                {"payee" : id}
+            $and : [
+                {
+                    $or: [
+                        {"sharedBy" : id},
+                        {"payee" : id}
+                    ]
+                },
+                {"isSettled" : false}
             ]
         })
         .populate('payees','name')
@@ -51,7 +57,9 @@ exports.getExpenses = async(req,res) => {
 exports.getExpense = async (req,res) => {
     const {expenseId} = req.params;
     try{
-        const expense = await Expense.findById(expenseId)
+        const expense = await Expense.find({
+            _id : expenseId
+        })
             .populate('payees','name')
             .populate('sharedBy','name')
             .select('-createdAt -updatedAt -__v');
@@ -67,14 +75,17 @@ exports.getExpense = async (req,res) => {
 // Updated expense, only name and amount update supported as of now
 exports.updateExpense = async (req,res) => {
     const {expenseId} = req.params;
-    const {name,amount} = req.body;
+    const {name,amount,isSettled} = req.body;
     const updateFields = {};
 
     if(name){
         updateFields.name = name;
     }
     if(amount){
-        updateFields.amount = amount
+        updateFields.amount = amount;
+    }
+    if(isSettled == true | isSettled == false){
+        updateFields.isSettled = isSettled;
     }
 
     try{
