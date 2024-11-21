@@ -1,5 +1,8 @@
 const Group = require("../models/group.model");
 const Expense = require("../models/expense.model");
+const {getNetAmount} = require("../utils/aggGroupExpenses");
+const { default: mongoose } = require("mongoose");
+const { ObjectId } = mongoose.Types;
 
 // Create Group
 exports.createGroup = async (req,res)=>{
@@ -176,6 +179,88 @@ exports.getExpenses = async(req,res) => {
     } catch(error) {
         console.error(error.message);
         return res.json({error : "Error fetching expenses"});
+    }
+}
+
+exports.unwindExpenses = async(req,res) => {
+    const {groupId} = req.params;
+    try{
+        const expenseSummary = await Expense.aggregate([
+            {
+                // It allows to run multiple aggregation pipelines
+                $facet: {
+                    // This pipeline will calculate the amount spent by each user
+                    lentAmount : [
+                        // Filter the data to be aggregated
+                        {
+                            $match : {
+                                groupId : new ObjectId(groupId), // Get expenses from the group
+                                isSettled : false // Get only non-settled expenses
+                            }
+                        },
+                        // Calculate amount lent by each payee based on number of payees
+                        {
+                            $addFields : {
+                                eachLent : {
+                                    $divide: [
+                                        "$amount",{$size: "$payees"}
+                                    ]
+                                },
+                            }
+                        },
+                        // unwind payees, will convert array if payees into separate documents
+                        {
+                            $unwind : '$payees'
+                        },
+                        // Will return sum of the total amount paid by each user
+                        {
+                            $group: {
+                                _id : "$payees",
+                                lentAmount : {$sum : "$eachLent"}
+                            }
+                        },
+                    ],
+                    borrowedAmount : [
+                         // Filter the data to be aggregated
+                        {
+                            $match : {
+                                groupId : new ObjectId(groupId), // Get expenses from the group
+                                isSettled : false // Get only non-settled expenses
+                            }
+                        },
+                        // Calculate amount borrowed by each user based on number of sharedIds
+                        {
+                            $addFields : {
+                                eachBorrowed : {
+                                    $divide: [
+                                        "$amount",{$size: "$sharedBy"}
+                                    ]
+                                },
+                            }
+                        },
+                        // unwind sharedBy, will convert array if sharedBy into separate documents
+                        {
+                            $unwind : '$sharedBy'
+                        },
+                        // Will return sum of the total amount borrowed by each user
+                        {
+                            $group: {
+                                _id : "$sharedBy",
+                                borrowedAmount : {$sum : "$eachBorrowed"}
+                            }
+                        },
+                    ]
+                }
+            }
+        ]);
+        const [userSummary] = expenseSummary;
+        const aggregatedData = getNetAmount(userSummary.lentAmount,userSummary.borrowedAmount);
+        return res.json(aggregatedData);
+    } catch(error){
+        console.error(error.message);
+        return res.status(400).json({
+            error : "Error finding expenses"
+        })
     }
 }
 
