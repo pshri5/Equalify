@@ -16,7 +16,8 @@ exports.createSchema = z.object({
 
 exports.updateSchema = z.object({
     name : z.string().min(1,"Name of expense is required").optional(),
-    amount : z.number().min(0,"Amount cannot be negative").optional()
+    amount : z.number().min(0,"Amount cannot be negative").optional(),
+    isSettled : z.boolean().optional()
 })
 
 exports.editUsersSchema = z.object({

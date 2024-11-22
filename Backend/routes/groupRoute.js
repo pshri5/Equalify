@@ -2,8 +2,8 @@ const {Router} = require("express");
 
 const checkAuth = require("../middlewares/checkAuth");
 const checkGroupAccess = require("../middlewares/checkGroupAccess");
-const {createGroup,listGroups,getGroup,updateGroup,deleteGroup,addMember,deleteMember} = require("../controllers/groupContoller");
-const {createSchema,memberSchema} = require("../validations/groupValidation");
+const {createGroup,listGroups,getGroup,updateGroup,deleteGroup,addMember,deleteMember,getExpenses,settleExpenses,unwindExpenses} = require("../controllers/groupContoller");
+const {createSchema,memberSchema,settleSchema} = require("../validations/groupValidation");
 const schemaValidator = require("../middlewares/schemaValidator");
 
 const groupRouter = Router();
@@ -15,6 +15,9 @@ groupRouter.put("/:groupId",schemaValidator(createSchema),checkAuth,checkGroupAc
 groupRouter.delete("/:groupId",checkAuth,checkGroupAccess,deleteGroup);
 groupRouter.put("/:groupId/members",schemaValidator(memberSchema),checkAuth,checkGroupAccess,addMember);
 groupRouter.delete("/:groupId/members",schemaValidator(memberSchema),checkAuth,checkGroupAccess,deleteMember);
+groupRouter.get("/:groupId/expenses",checkAuth,checkGroupAccess,getExpenses);
+groupRouter.post("/:groupId/expenses",schemaValidator(settleSchema),checkAuth,checkGroupAccess,settleExpenses);
+groupRouter.get("/:groupId/expenses/agg",checkAuth,checkGroupAccess,unwindExpenses);
 
 module.exports = {
     groupRouter : groupRouter

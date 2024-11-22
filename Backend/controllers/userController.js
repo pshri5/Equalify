@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
 const User =require("../models/user.model");
+const Expense = require("../models/expense.model");
 const { JWT_USER_PASSWORD } = require("../config/envConfig");
 
 // Hash the user password
@@ -144,6 +145,30 @@ exports.setProfile = async (req,res) => {
         console.log(error);
         return res.status(400).json({
             message : "Error updating info"
+        })
+    }
+}
+
+exports.getExpenses = async (req,res) => {
+    const id = req.id;
+    try{
+        const expenses = await Expense.find({
+            $and : [
+                {isSettled : false},
+                {
+                    $or : [
+                        {payees : id},
+                        {sharedBy : id}
+                    ]
+                }
+            ]
+            
+        })
+        return res.json(expenses)
+    } catch(error){
+        console.log(error.message);
+        return res.status(400).json({
+            error : "Error fetching expenses"
         })
     }
 }

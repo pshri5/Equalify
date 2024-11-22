@@ -12,6 +12,10 @@ const expenseSchema = new Schema({
         type: Number,
         required: true,
     },
+    isSettled : {
+        type: Boolean,
+        required: true,
+    },
     payees : [
         {
             type: mongoose.Schema.Types.ObjectId,
