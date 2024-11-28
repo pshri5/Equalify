@@ -4,6 +4,40 @@ import { Card } from "../components/Card";
 import { RupeeIcon } from "../icons/RupeeIcon";
 import { GroupIcon } from "../icons/GroupIcon";
 import { Footer } from "../components/Footer";
+import { ExpenseTable } from "../components/ExpenseTable";
+
+const expenseData = [
+    {
+        description : "Food",
+        amount : 500,
+        group : "New Friends",
+        date : "28th Nov, 2024"
+    },
+    {
+        description : "Food",
+        amount : 500,
+        group : "New Friends",
+        date : "28th Nov, 2024"
+    },
+    {
+        description : "Food",
+        amount : 500,
+        group : "New Friends",
+        date : "28th Nov, 2024"
+    },
+    {
+        description : "Food",
+        amount : 500,
+        group : "New Friends",
+        date : "28th Nov, 2024"
+    },
+    {
+        description : "Food",
+        amount : 500,
+        group : "New Friends",
+        date : "28th Nov, 2024"
+    }
+];
 
 export const Dashboard = () => {
     const [name,setName] = useState("Ankit Sharma");
@@ -29,50 +63,7 @@ export const Dashboard = () => {
             </div>
             <div className="text-4xl font-bold mb-10">Recent Expenses</div>
             <div className="w-full">
-                <table className="table-auto border-collapse border rounded-lg w-full">
-                    <thead className="text-lg md:text-xl">
-                        <th className="rounded-tl-lg border py-2 bg-brand-950 text-brand-50 ">Description</th>
-                        <th className="border py-2 bg-brand-950 text-brand-50">Amount</th>
-                        <th className="rounded-tr-lg md:rounded-none border py-2 bg-brand-950 text-brand-50">Group</th>
-                        <th className="hidden md:block rounded-tr-lg border py-2 bg-brand-950 text-brand-50">Date</th>
-                    </thead>
-                    <tbody className="text-center text-md md:text-lg">
-                        <tr>
-                            <td className="border py-2">Food</td>
-                            <td className="border py-2">₹ 500.00</td>
-                            <td className="border py-2">Friends</td>
-                            <td className="hidden md:block border py-2">27th Nov, 2024</td>
-                        </tr>
-                        <tr>
-                            <td className="border py-2">Food</td>
-                            <td className="border py-2">₹ 500.00</td>
-                            <td className="border py-2">Friends</td>
-                            <td className="hidden md:block border py-2">27th Nov, 2024</td>
-                        </tr>
-                        <tr>
-                            <td className="border py-2">Food</td>
-                            <td className="border py-2">₹ 500.00</td>
-                            <td className="border py-2">Friends</td>
-                            <td className="hidden md:block border py-2">27th Nov, 2024</td>
-                        </tr>
-                        <tr>
-                            <td className="border py-2">Food</td>
-                            <td className="border py-2">₹ 500.00</td>
-                            <td className="border py-2">Friends</td>
-                            <td className="hidden md:block border py-2">27th Nov, 2024</td>
-                        </tr>
-                        <tr>
-                            <td className="border py-2">Food</td>
-                            <td className="border py-2">₹ 500.00</td>
-                            <td className="border py-2">Friends</td>
-                            <td className="hidden md:block border py-2">27th Nov, 2024</td>
-                        </tr>
-                    </tbody>
-                    <tfoot className="text-center text-md md:text-lg text-brand-50 font-bold">
-                        <td className="rounded-bl-lg bg-brand-950 py-2">Total</td>
-                        <td colSpan="3" className="rounded-br-lg bg-brand-950 py-2">₹ 500.00</td>
-                    </tfoot>
-                </table>
+                <ExpenseTable expenseData={expenseData} />
             </div>
         </div>
         <Footer />
