@@ -1,5 +1,5 @@
 
-export const Profile = ()=> {
+export const ProfilePage = ()=> {
     return <>
         Profile
     </>

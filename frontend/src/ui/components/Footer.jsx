@@ -4,9 +4,11 @@ import { GithubIcon } from "../icons/GithubIcon";
 import { InstagramIcon } from "../icons/InstagramIcon";
 import { FooterSection } from "./FooterSection";
 
+const gernericStyles = "px-10 md:px-16 lg:px-28";
+
 export const Footer = ()=>{
     return <>
-        <footer className="md:px-16 lg:px-28 py-10 my-10 bg-brand-950 text-brand-50 w-screen">
+        <footer className={`${gernericStyles} pt-10 bg-brand-950 text-brand-50 max-h-fit`}>
             <div className="flex flex-col gap-5 md:flex-row justify-between flex-wrap mb-4">
                 <FooterSection className="w-full md:max-w-60" title="Equalify">
                     <p>Share and settle expenses with friends and family, making group finances simple and stress-free.</p>

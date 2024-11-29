@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Prevent horizontal scroll bar from showing */
+html,
+body {
+  @apply overflow-x-hidden;
+}

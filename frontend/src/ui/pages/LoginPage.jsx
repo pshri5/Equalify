@@ -3,12 +3,12 @@ import { Input } from '../components/Input';
 import { Card } from '../components/Card';
 import { useState } from 'react';
 
-export const Signup = () => {
+export const LoginPage = () => {
     const [errorMsg,setErrorMsg] = useState("");
     return <>
         <div className='flex items-center justify-center h-screen flex-col gap-8'>
         <Card className="my-2">
-          <div className='text-black text-3xl font-bold text-center mb-4'>Create Account</div>
+          <div className='text-black text-3xl font-bold text-center mb-4'>Login</div>
           <div className='mb-10'>
             <Input label="Email" size="lg" placeholder="Enter your email"/>
             <Input label="Password" size="lg"placeholder="Enter your password" type="password"/>
@@ -16,10 +16,13 @@ export const Signup = () => {
           {errorMsg ? 
             <div className='text-red-500 text-lg text-center'>{errorMsg}</div> 
           : null}
-          <Button size="lg" variant="primary" label="Sign Up"/>
+          <Button size="lg" variant="primary" label="Sign In"/>
+          <div className='text-center hover:underline'>
+            <a href="">Forgot Password?</a>
+          </div>
         </Card>
         <div className='text-brand-700 text-lg'>
-          Already registered? <a className='font-bold hover:underline' href="">Sign In</a>
+          Don't have an account? <a className='font-bold hover:underline' href="">Sign Up</a>
         </div>
       </div>
     </>

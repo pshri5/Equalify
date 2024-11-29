@@ -39,14 +39,17 @@ const recentExpenses = [
     }
 ];
 
-export const Dashboard = () => {
+const gernericStyles = "px-10 md:px-16 lg:px-28 py-10";
+
+export const DashboardPage = () => {
     const [name,setName] = useState("Ankit Sharma");
     const [spending,setSpending] = useState(0);
     const [groupCount, setGroupCount] = useState(0);
     return <div>
         <Header name={name}/>
-        <div className="px-10 md:px-16 lg:px-28">
-            <div className="text-4xl font-bold my-10">Welcome {name}!</div>
+        <div className={gernericStyles}>
+            <div className="text-4xl font-bold">Welcome {name}!</div>
+            {/*
             <div className="flex gap-6 lg:gap-10 flex-wrap my-10 justify-center lg:justify-start">
                 <Card className="w-full max-w-96 rounded-md px-6 py-6">
                     <div className="text-xl flex justify-between">
@@ -65,12 +68,13 @@ export const Dashboard = () => {
                     </div>
                     <div className="mt-6 text-3xl font-bold">{groupCount}</div>
                 </Card>
-            </div>
+            </div>*/}
             <div className="text-4xl font-bold mb-10">Recent Expenses</div>
             <div className="w-full">
                 <ExpenseTable expenseData={recentExpenses} />
             </div>
         </div>
+        
         <Footer />
     </div>
 }
