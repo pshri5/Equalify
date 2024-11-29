@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { Avatar } from './ui/components/Avatar';
+import { Dashboard } from './ui/pages/Dashboard';
+import { Login } from './ui/pages/Login';
+import { Signup } from './ui/pages/Signup';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <h1>Equalify</h1>
-      <h3>Making Expense Sharing Effortless</h3>
+      <div className='flex justify-center h-screen'>
+        <Dashboard />
+      </div>
     </>
   );
 }
