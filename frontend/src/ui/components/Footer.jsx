@@ -6,7 +6,7 @@ import { FooterSection } from "./FooterSection";
 
 export const Footer = ()=>{
     return <>
-        <footer className="px-10 md:px-16 lg:px-28 py-10 my-10 bg-brand-950 text-brand-50">
+        <footer className="md:px-16 lg:px-28 py-10 my-10 bg-brand-950 text-brand-50 w-screen">
             <div className="flex flex-col gap-5 md:flex-row justify-between flex-wrap mb-4">
                 <FooterSection className="w-full md:max-w-60" title="Equalify">
                     <p>Share and settle expenses with friends and family, making group finances simple and stress-free.</p>

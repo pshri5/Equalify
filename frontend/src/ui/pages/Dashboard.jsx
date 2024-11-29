@@ -6,7 +6,7 @@ import { GroupIcon } from "../icons/GroupIcon";
 import { Footer } from "../components/Footer";
 import { ExpenseTable } from "../components/ExpenseTable";
 
-const expenseData = [
+const recentExpenses = [
     {
         description : "Food",
         amount : 500,
@@ -32,8 +32,8 @@ const expenseData = [
         date : "28th Nov, 2024"
     },
     {
-        description : "Food",
-        amount : 500,
+        description : "Fooding",
+        amount : 100,
         group : "New Friends",
         date : "28th Nov, 2024"
     }
@@ -41,8 +41,10 @@ const expenseData = [
 
 export const Dashboard = () => {
     const [name,setName] = useState("Ankit Sharma");
+    const [spending,setSpending] = useState(0);
+    const [groupCount, setGroupCount] = useState(0);
     return <div>
-        <Header />
+        <Header name={name}/>
         <div className="px-10 md:px-16 lg:px-28">
             <div className="text-4xl font-bold my-10">Welcome {name}!</div>
             <div className="flex gap-6 lg:gap-10 flex-wrap my-10 justify-center lg:justify-start">
@@ -51,19 +53,22 @@ export const Dashboard = () => {
                         <span>Total Spendings</span>
                         <RupeeIcon />
                     </div>
-                    <div className="mt-6 text-3xl font-bold">₹ 5,610.00</div>
+                    <div className="mt-6 text-3xl font-bold">{Intl.NumberFormat("en-IN", {
+                            style: "currency",
+                            currency: "INR",
+                            }).format(spending)}</div>
                 </Card>
                 <Card className="w-full max-w-96 rounded-md px-6 py-6">
                     <div className="text-xl flex justify-between">
                         <span>Total Groups</span>
                         <GroupIcon />
                     </div>
-                    <div className="mt-6 text-3xl font-bold">10</div>
+                    <div className="mt-6 text-3xl font-bold">{groupCount}</div>
                 </Card>
             </div>
             <div className="text-4xl font-bold mb-10">Recent Expenses</div>
             <div className="w-full">
-                <ExpenseTable expenseData={expenseData} />
+                <ExpenseTable expenseData={recentExpenses} />
             </div>
         </div>
         <Footer />
