@@ -24,6 +24,18 @@ const groupList = [
       members : 6,
       spending : 5461
     },
+    {
+      name : "SSB",
+      description : "Friends from interview",
+      members : 6,
+      spending : 5461
+    },
+    {
+      name : "SSB",
+      description : "Friends from interview",
+      members : 6,
+      spending : 5461
+    },
   ]
 
 function App() {

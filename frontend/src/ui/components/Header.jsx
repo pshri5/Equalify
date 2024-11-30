@@ -4,7 +4,7 @@ import { GroupIcon } from "../icons/GroupIcon"
 import { Avatar } from "./Avatar"
 
 
-const gernericStyles = "z-50 px-10 md:px-16 lg:px-28";
+const gernericStyles = "z-30 px-10 md:px-16 lg:px-28";
 
 export const Header = (props) => {
     const [initials,setInitials] = useState("")
