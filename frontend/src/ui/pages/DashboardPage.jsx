@@ -68,12 +68,10 @@ export const DashboardPage = () => {
                     <div className="mt-6 text-3xl font-bold">{groupCount}</div>
                 </Card>
             </div>
-            <div className="text-4xl font-bold mb-10">Recent Expenses</div>
             <div className="w-full">
                 <ExpenseTable expenseData={recentExpenses} />
             </div>
         </div>
-        
         <Footer />
     </div>
 }

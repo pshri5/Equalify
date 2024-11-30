@@ -3,6 +3,7 @@ export const ExpenseTable = (props) => {
     const expenseData = props?.expenseData;
     const totalAmount = expenseData?.reduce((sum, item) => sum + item.amount, 0);
     return <>
+        <div className="text-4xl font-bold mb-10">Recent Expenses</div>
         {expenseData ? <table className="table-auto border-collapse border w-full">
                     <thead  className="text-lg md:text-xl">
                         <tr>
