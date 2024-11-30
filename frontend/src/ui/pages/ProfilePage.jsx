@@ -1,6 +1,10 @@
+import { Footer } from "../components/Footer"
+import { Header } from "../components/Header"
 
 export const ProfilePage = ()=> {
     return <>
-        Profile
+        <div className="h-20">
+            Profile
+        </div>
     </>
 }

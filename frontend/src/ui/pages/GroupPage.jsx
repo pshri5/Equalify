@@ -7,6 +7,7 @@ import { GroupCard } from "../components/GroupCard";
 import { Modal } from "../components/Modal";
 import { Input } from "../components/Input";
 import { GroupIcon } from "../icons/GroupIcon";
+import { ContentWrapper } from "../components/ContentWrapper";
 
 const gernericStyles = "px-10 md:px-16 lg:px-28 py-10";
 
@@ -23,8 +24,6 @@ export const GroupPage = (props) => {
     const createGroupLabel = isMobile ? "" : "Create Group"
 
     return <div className="relative">
-        <Header name="Ankit Sharma" />
-        <div className={gernericStyles}>
             <div className="flex justify-between align-middle flex-wrap">
                 <div className="text-4xl font-bold flex items-center">My Groups</div>
                 <Button size="sm" label={createGroupLabel} onClick={()=>{setModalVisible(true)}} endIcon={<AddIcon />} />
@@ -36,7 +35,6 @@ export const GroupPage = (props) => {
                     </div>
                 ))}
             </div>
-        </div>
         {isModalVisible ? 
         <Modal className={gernericStyles} isModalVisible={isModalVisible} setModalVisible={setModalVisible}>
             <Input label="Group" size="lg" placeholder="Enter name of the group"/>
@@ -44,7 +42,5 @@ export const GroupPage = (props) => {
             <Button label="Create Group" endIcon={<GroupIcon />}/>
         </Modal> : null
         }
-        
-        <Footer />
     </div>
 }

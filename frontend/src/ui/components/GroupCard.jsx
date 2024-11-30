@@ -16,7 +16,7 @@ export const GroupCard = (props) => {
                     <div className="text-sm text-brand-700">{props.members} members</div>
                 </div>
             </div>
-            <div className="text-brand-800">{props.description}</div>
+            <div className="text-brand-800 text-sm">{props.description}</div>
             <div className="font-bold absolute bottom-2">Total Spendings : {Intl.NumberFormat("en-IN", {
                             style: "currency",
                             currency: "INR",

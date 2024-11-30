@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { DashboardIcon } from "../icons/DashboardIcon"
 import { GroupIcon } from "../icons/GroupIcon"
 import { Avatar } from "./Avatar"
+import { NavLink } from "react-router-dom"
 
 
 const gernericStyles = "z-30 px-10 md:px-16 lg:px-28";
@@ -17,9 +18,15 @@ export const Header = (props) => {
     return <header className={`${gernericStyles} flex justify-between items-center md:w-screen h-16 bg-brand-950 sticky top-0 text-white`}>
         <div className="flex gap-10 md:gap-12 lg:gap-16 items-center  text-xl">
             <img src="../../public/EqualifyLogo.png" className="h-12" />
-            <div className="flex gap-4"><DashboardIcon /><span className="hidden md:block">Dashboard</span></div>
-            <div className="flex gap-4"><GroupIcon /><span className="hidden md:block">Groups</span></div>
+            <NavLink to="/dashboard">
+                <div className="flex gap-4"><DashboardIcon /><span className="hidden md:block">Dashboard</span></div>
+            </NavLink>
+            <NavLink to="groups">
+                <div className="flex gap-4"><GroupIcon /><span className="hidden md:block">Groups</span></div>
+            </NavLink>
         </div>
-        <Avatar initials={initials} />
+        <NavLink to="/profile">
+            <Avatar initials={initials} />
+        </NavLink>
     </header>
 }

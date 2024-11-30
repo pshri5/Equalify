@@ -5,6 +5,7 @@ import { RupeeIcon } from "../icons/RupeeIcon";
 import { GroupIcon } from "../icons/GroupIcon";
 import { Footer } from "../components/Footer";
 import { ExpenseTable } from "../components/ExpenseTable";
+import { ContentWrapper } from "../components/ContentWrapper";
 
 const recentExpenses = [
     {
@@ -46,8 +47,6 @@ export const DashboardPage = () => {
     const [spending,setSpending] = useState(0);
     const [groupCount, setGroupCount] = useState(0);
     return <div>
-        <Header name={name}/>
-        <div className={gernericStyles}>
             <div className="text-4xl font-bold">Welcome {name}!</div>
             <div className="flex gap-6 lg:gap-10 flex-wrap my-10 justify-center lg:justify-start">
                 <Card className="w-full max-w-96 rounded-md px-6 py-6">
@@ -71,7 +70,5 @@ export const DashboardPage = () => {
             <div className="w-full">
                 <ExpenseTable expenseData={recentExpenses} />
             </div>
-        </div>
-        <Footer />
     </div>
 }
