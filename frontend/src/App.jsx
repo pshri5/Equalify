@@ -47,7 +47,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />} >
-          <Route index path="/dashboard" element={<DashboardPage />} />
+          <Route index path="/" element={<DashboardPage />} />
           <Route path="/groups" element={<GroupPage groupList={groupList} />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Route>
