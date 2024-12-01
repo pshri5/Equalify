@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./user.model');
 const Group = require('./group.model');
-const Schema = mongoose.Schema;
+
 
 const expenseSchema = new Schema({
     name :{
