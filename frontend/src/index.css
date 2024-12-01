@@ -7,3 +7,8 @@ html,
 body {
   @apply overflow-x-hidden;
 }
+
+
+*,*::after,*::before {
+  box-sizing: border-box;
+}

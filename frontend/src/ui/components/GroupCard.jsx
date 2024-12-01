@@ -2,7 +2,7 @@ import { GroupIcon } from "../icons/GroupIcon"
 import { Card } from "./Card"
 
 export const GroupCard = (props) => {
-    return <div className="w-80 h-full">
+    return <div className="w-72 md:w-80 h-full">
         <Card className="px-5 pt-4 pb-10 relative">
             <div className="mb-4 flex justify-between items-center">
                 <div className="flex gap-4 items-center">
