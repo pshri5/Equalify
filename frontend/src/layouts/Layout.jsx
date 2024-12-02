@@ -2,15 +2,18 @@ import { Outlet } from "react-router-dom"
 import { ContentWrapper } from "../ui/components/ContentWrapper"
 import { Header } from "../ui/components/Header"
 import { Footer } from "../ui/components/Footer"
+import { useRecoilValue } from "recoil"
+import { authState } from "../atoms/authState"
 
 export const Layout = () => {
+    const isAuth = useRecoilValue(authState)
     return <>
-        <Header name="Ankit Sharma" />
+        {isAuth ? <Header name="Ankit Sharma" /> : null}
         <main>
             <ContentWrapper>
                 <Outlet />
             </ContentWrapper>
         </main>
-        <Footer />
+        {isAuth ? <Footer /> : null}
     </>
 }

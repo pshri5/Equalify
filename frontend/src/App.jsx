@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css'
-import { Avatar } from './ui/components/Avatar';
-import { Footer } from './ui/components/Footer';
-import { Header } from './ui/components/Header';
 import { DashboardPage } from './ui/pages/DashboardPage';
 import { GroupPage } from './ui/pages/GroupPage';
 import { ProfilePage } from './ui/pages/ProfilePage';
 import {Layout} from "./layouts/Layout";
+import { LoginPage } from './ui/pages/LoginPage';
+import { SignupPage } from './ui/pages/SignupPage';
+import { RecoilRoot } from 'recoil';
 
 const groupList = [
     {
@@ -44,16 +44,19 @@ const groupList = [
 function App() {
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />} >
-          <Route index path="/" element={<DashboardPage />} />
-          <Route path="/groups" element={<GroupPage groupList={groupList} />} />
-          <Route path="/profile" element={<ProfilePage />} />
-        </Route>
-      </Routes>
-    
-    </BrowserRouter>
+    <RecoilRoot>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />} >
+            <Route index path="/" element={<DashboardPage />} />
+            <Route path="/groups" element={<GroupPage groupList={groupList} />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </RecoilRoot>
     </>
   );
 }
