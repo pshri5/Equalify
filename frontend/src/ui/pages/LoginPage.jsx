@@ -1,35 +1,46 @@
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Card } from '../components/Card';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState } from '../../atoms/authState';
+import { useNavigate } from 'react-router-dom';
+import { userLogin } from '../../atoms/serverSetup';
 
 export const LoginPage = () => {
     const [errorMsg,setErrorMsg] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [isAuth,setIsAuth] = useRecoilState(authState);
+    const LOGIN_URL = useRecoilValue(userLogin);
+    const navigate = useNavigate();
     
     const signinHandler = async () => {
       try {
-        const res = await axios.post("http://localhost:3000/api/v1/users/login",{
+        const res = await axios.post(LOGIN_URL,{
             email : email,
             password : password
           })
           if(res.statusText == "OK"){
-            const token = res.token;
-            window.localStorage.setItem("token",token);
+            console.log(res.data.token);
             setIsAuth(true);
+            window.sessionStorage.setItem("token",res.data.token);
           }
       } catch(error){
         setErrorMsg(error.response.data.error);
       }
     }
 
+    useEffect(()=>{
+      const token = window.sessionStorage.getItem("token");
+      if(token){
+        navigate("/");
+      }
+    },[isAuth])
+
     return <>
-        <div className='flex items-center justify-center h-screen flex-col gap-8'>
+        <div className='flex items-center justify-center max-h-screen flex-col gap-4'>
         <Card className="my-2">
           <div className='text-black text-3xl font-bold text-center mb-4'>Login</div>
           <div className='mb-10'>
@@ -64,6 +75,7 @@ export const LoginPage = () => {
         </Card>
         <div className='text-brand-700 text-lg'>
           Don't have an account? <a className='font-bold hover:underline' href="/signup">Sign Up</a>
+          
         </div>
       </div>
     </>

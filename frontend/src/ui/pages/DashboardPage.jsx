@@ -6,6 +6,10 @@ import { GroupIcon } from "../icons/GroupIcon";
 import { Footer } from "../components/Footer";
 import { ExpenseTable } from "../components/ExpenseTable";
 import { ContentWrapper } from "../components/ContentWrapper";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { authState } from "../../atoms/authState";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const recentExpenses = [
     {
@@ -46,6 +50,18 @@ export const DashboardPage = () => {
     const [name,setName] = useState("Ankit Sharma");
     const [spending,setSpending] = useState(0);
     const [groupCount, setGroupCount] = useState(0);
+    const isAuth = useRecoilValue(authState);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+      const token = window.sessionStorage.getItem("token");
+      if(!token){
+        navigate("/login");
+      }
+
+      
+    },[])
+
     return <div>
             <div className="text-4xl font-bold">Welcome {name}!</div>
             <div className="flex gap-6 lg:gap-10 flex-wrap my-10 justify-center lg:justify-start">

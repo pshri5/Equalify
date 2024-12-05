@@ -3,41 +3,50 @@ import { Input } from '../components/Input';
 import { Card } from '../components/Card';
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { userRegister } from '../../atoms/serverSetup';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { authState } from '../../atoms/authState';
+import { useEffect } from 'react';
 
 export const SignupPage = () => {
     const [errorMsg,setErrorMsg] = useState("");
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
+    const SIGNUP_URL = useRecoilValue(userRegister);
+    const isAuth = useRecoilValue(authState);
+    const navigate = useNavigate();
 
     const signupHandler = async () => {
       try {
-        const response = await axios.post("http://localhost:3000/api/v1/users/register",{
+        const response = await axios.post(SIGNUP_URL,{
           name : name,
           email : email,
           password : password
         })
-        if(response.statusText == "OK") {
-          const res = await axios.post("http://localhost:3000/api/v1/users/login",{
-            email : email,
-            password : password
-          })
-        
-          const token = res.token;
-          window.localStorage.setItem("token",token);
-          setIsAuth(true);
+        if(response.statusText == "OK"){
+          navigate("/login");
         }
+
       } catch(error){
           console.log(error);
           setErrorMsg(error.response.data.error);
       }
     }
 
+    useEffect(()=>{
+      const token = window.sessionStorage.getItem("token");
+      if(token){
+        navigate("/");
+      }
+    },[isAuth])
+
     return <>
-        <div className='flex items-center justify-center h-screen flex-col gap-8'>
-        <Card className="my-2">
-          <div className='text-black text-3xl font-bold text-center mb-4'>Create Account</div>
-          <div className='mb-10'>
+        <div className='flex items-center justify-center max-h-screen flex-col gap-4'>
+        <Card>
+          <div className='text-black text-3xl font-bold text-center mb-2'>Create Account</div>
+          <div className='mb-8'>
             <Input 
               label="Name" 
               size="lg" 
