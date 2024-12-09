@@ -2,18 +2,32 @@ import { useEffect, useState } from "react"
 import { DashboardIcon } from "../icons/DashboardIcon"
 import { GroupIcon } from "../icons/GroupIcon"
 import { Avatar } from "./Avatar"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
+import { LogoutIcon } from "../icons/LogoutIcon"
+import { authState } from "../../atoms/authState"
+import { useRecoilState } from "recoil"
+import { Button } from "./Button"
 
 
 const gernericStyles = "z-30 px-10 md:px-16 lg:px-28";
 
 export const Header = (props) => {
-    const [initials,setInitials] = useState("")
+    const [initials,setInitials] = useState("");
+    const [isAuth,setIsAuth] = useRecoilState(authState);
+    const navigate = useNavigate();
     useEffect(()=>{
         const value = props.name.split(" ").map((word)=> word.charAt(0))
                         .slice(0,2).join("");
         setInitials(value);
     });
+
+    
+    function logoutHandler() {
+        setIsAuth(false);
+        window.sessionStorage.setItem("token","");
+        navigate("/login");
+    }
+    
 
     return <nav className="sticky top-0">
         <div className={`${gernericStyles} flex justify-between items-center md:w-screen h-16 bg-brand-950 text-white`}>
@@ -34,9 +48,11 @@ export const Header = (props) => {
                     <div className="flex gap-4 h-16 items-center"><GroupIcon /><span className="hidden md:block">Groups</span></div>
                 </NavLink>
             </div>
-            <NavLink to="/profile">
-                <Avatar initials={initials} />
-            </NavLink>
+            <div className="flex gap-2">
+                <NavLink to="/profile">
+                    <Avatar initials={initials} />
+                </NavLink>
+            </div>
         </div>
     </nav>
 }

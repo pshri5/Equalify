@@ -3,54 +3,28 @@ import { Header } from "../components/Header"
 import { Card } from "../components/Card";
 import { RupeeIcon } from "../icons/RupeeIcon";
 import { GroupIcon } from "../icons/GroupIcon";
-import { Footer } from "../components/Footer";
 import { ExpenseTable } from "../components/ExpenseTable";
-import { ContentWrapper } from "../components/ContentWrapper";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { authState } from "../../atoms/authState";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { GROUP_LIST, USER_EXPENSES,USER_PROFILE } from "../../config/serverConfig";
+import axios from "axios";
 
-const recentExpenses = [
-    {
-        description : "Food",
-        amount : 500,
-        group : "New Friends",
-        date : "28th Nov, 2024"
-    },
-    {
-        description : "Food",
-        amount : 500,
-        group : "New Friends",
-        date : "28th Nov, 2024"
-    },
-    {
-        description : "Food",
-        amount : 500,
-        group : "New Friends",
-        date : "28th Nov, 2024"
-    },
-    {
-        description : "Food",
-        amount : 500,
-        group : "New Friends",
-        date : "28th Nov, 2024"
-    },
-    {
-        description : "Fooding",
-        amount : 100,
-        group : "New Friends",
-        date : "28th Nov, 2024"
-    }
-];
 
 const gernericStyles = "px-10 md:px-16 lg:px-28 py-10";
+const headers = {
+    headers: {
+        token : window.sessionStorage.getItem("token")
+    }
+}
 
 export const DashboardPage = () => {
-    const [name,setName] = useState("Ankit Sharma");
+    const [name,setName] = useState("");
     const [spending,setSpending] = useState(0);
     const [groupCount, setGroupCount] = useState(0);
-    const isAuth = useRecoilValue(authState);
+    const [isAuth,setIsAuth] = useRecoilState(authState);
+    const [recentExpenses,setRecentExpenses] = useState([]);
     const navigate = useNavigate();
 
     useEffect(()=>{
@@ -58,9 +32,37 @@ export const DashboardPage = () => {
       if(!token){
         navigate("/login");
       }
+      getDashDetails();
+    },[]);
 
-      
-    },[])
+    const getDashDetails = async () => {
+        try {
+            const expense = await axios.get(USER_EXPENSES,headers);
+            const profile = await axios.get(USER_PROFILE,headers);
+            const groupList = await axios.get(GROUP_LIST,headers);
+
+            const cleanExpense = expense.data.map((element)=>{
+                return {
+                    name : element.name,
+                    amount : element.amount,
+                    group : element.groupId.name,
+                    date : formatDate(element.createdAt.split('T')[0])
+                }
+            });
+            const totalSpending = cleanExpense.reduce((total,item) => total + item.amount,0);
+
+            const recentExpenses = cleanExpense.slice()
+            .sort((a,b) => a-b)
+            .slice(0,5);
+
+            setRecentExpenses(recentExpenses);
+            setSpending(totalSpending);
+            setName(profile.data.name);
+            setGroupCount(groupList.data.groups.length);
+        } catch(e) {
+            console.log(e);
+        }
+    }
 
     return <div>
             <div className="text-4xl font-bold">Welcome {name}!</div>
@@ -84,7 +86,28 @@ export const DashboardPage = () => {
                 </Card>
             </div>
             <div className="w-full">
-                <ExpenseTable expenseData={recentExpenses} />
+                {recentExpenses.length ? <ExpenseTable expenseData={recentExpenses} /> : null}
             </div>
     </div>
 }
+
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    const day = date.getDate();
+    const month = date.toLocaleString('default', { month: 'short' }); // "Nov"
+    const year = date.getFullYear();
+
+    // Add ordinal suffix to the day
+    const ordinalSuffix = (n) => {
+        if (n > 3 && n < 21) return 'th'; // Covers 11th, 12th, 13th, etc.
+        switch (n % 10) {
+            case 1: return 'st';
+            case 2: return 'nd';
+            case 3: return 'rd';
+            default: return 'th';
+        }
+    };
+
+    return `${day}${ordinalSuffix(day)} ${month}, ${year}`;
+};

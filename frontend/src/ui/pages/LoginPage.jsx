@@ -6,24 +6,22 @@ import axios from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState } from '../../atoms/authState';
 import { useNavigate } from 'react-router-dom';
-import { userLogin } from '../../atoms/serverSetup';
+import { USER_LOGIN } from '../../config/serverConfig';
 
 export const LoginPage = () => {
     const [errorMsg,setErrorMsg] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const [isAuth,setIsAuth] = useRecoilState(authState);
-    const LOGIN_URL = useRecoilValue(userLogin);
     const navigate = useNavigate();
     
     const signinHandler = async () => {
       try {
-        const res = await axios.post(LOGIN_URL,{
+        const res = await axios.post(USER_LOGIN,{
             email : email,
             password : password
           })
           if(res.statusText == "OK"){
-            console.log(res.data.token);
             setIsAuth(true);
             window.sessionStorage.setItem("token",res.data.token);
           }

@@ -4,23 +4,22 @@ import { Card } from '../components/Card';
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { userRegister } from '../../atoms/serverSetup';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState } from '../../atoms/authState';
 import { useEffect } from 'react';
+import { USER_REGISTER } from '../../config/serverConfig';
 
 export const SignupPage = () => {
     const [errorMsg,setErrorMsg] = useState("");
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
-    const SIGNUP_URL = useRecoilValue(userRegister);
     const isAuth = useRecoilValue(authState);
     const navigate = useNavigate();
 
     const signupHandler = async () => {
       try {
-        const response = await axios.post(SIGNUP_URL,{
+        const response = await axios.post(USER_REGISTER,{
           name : name,
           email : email,
           password : password
